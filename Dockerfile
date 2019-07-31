@@ -6,13 +6,15 @@
 #
 # to debug vault clusters you will need VAULT_ADDR, VAULT_CAPATH and VAULT_TOKEN set
 #
-# to debug kafka producers and consumers: kafka[TAB]
+# to debug kafka producers and consumers look for scripts in /kafka*/bin/
 
 FROM ubuntu:18.04
+
 RUN apt-get update -y && \
 	apt-get install -y \
 	dnsutils \
 	iputils-ping \
+	python-pip \
 	python-pymongo \
 	mongodb-clients \
 	mongo-tools \
@@ -35,6 +37,9 @@ RUN apt-get update -y && \
 	python-confluent-kafka \
 	vim \
 	unzip
+
+RUN pip install cassandra-driver cqlsh
 RUN wget https://releases.hashicorp.com/vault/1.1.3/vault_1.1.3_linux_amd64.zip -O - | gunzip - > vault && chmod +x vault
 RUN wget http://ftp.unicamp.br/pub/apache/kafka/2.3.0/kafka_2.12-2.3.0.tgz -O - | tar zxv -C /
-RUN cp -ar vault kafka_2.12-2.3.0/bin/* /usr/local/bin/
+
+ENV CQLSH_NO_BUNDLED="true"
