@@ -13,9 +13,11 @@ FROM ubuntu:18.04
 RUN apt-get update -y && \
 	apt-get install -y \
 	dnsutils \
+	postgresql-client \
 	iputils-ping \
 	python-pip \
 	python-pymongo \
+	python-setuptools \
 	mongodb-clients \
 	mongo-tools \
 	openjdk-11-jre-headless \
@@ -38,8 +40,21 @@ RUN apt-get update -y && \
 	vim \
 	unzip
 
-RUN pip install cassandra-driver cqlsh
+RUN pip install cassandra-driver cqlsh \
+	&& mkdir -p /root/.cassandra/ \
+	&& echo -e "[cql]\nversion=3.4.4" > /root/.cassandra/cqlshrc \
+	&& rm -rf /root/.cache/*
+
+RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.10.0/protoc-3.10.0-linux-x86_64.zip -O protoc.zip \
+	&& unzip protoc.zip -d /usr/local/ \
+	&& rm -rf protoc.zip
+
+# a lean grpc_cli installation is still pending
+
 RUN wget https://releases.hashicorp.com/vault/1.1.3/vault_1.1.3_linux_amd64.zip -O - | gunzip - > vault && chmod +x vault
 RUN wget http://ftp.unicamp.br/pub/apache/kafka/2.3.0/kafka_2.12-2.3.0.tgz -O - | tar zxv -C /
+
+RUN wget https://github.com/pressly/goose/releases/download/v2.6.0/goose-linux64 -O /usr/local/bin/goose \
+	&& chmod +x /usr/local/bin/goose
 
 ENV CQLSH_NO_BUNDLED="true"
