@@ -42,7 +42,7 @@ RUN apt-get update -y && \
 
 RUN pip install cassandra-driver cqlsh \
 	&& mkdir -p /root/.cassandra/ \
-	&& echo -e "[cql]\nversion=3.4.4" > /root/.cassandra/cqlshrc \
+	&& echo "[cql]\nversion=3.4.4" > /root/.cassandra/cqlshrc \
 	&& rm -rf /root/.cache/*
 
 RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.10.0/protoc-3.10.0-linux-x86_64.zip -O protoc.zip \
