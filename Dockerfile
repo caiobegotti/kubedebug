@@ -1,3 +1,5 @@
+# https://www.brendangregg.com/linuxperf.html
+#
 # build this with: docker build -t caiobegotti/kubedebug .
 #
 # to run this container: kubectl run kubedebug --rm -it --image=caiobegotti/kubedebug:latest
